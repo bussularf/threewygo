@@ -134,6 +134,8 @@ GEM
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.1.8)
+    rack-cors (2.0.2)
+      rack (>= 2.0.0)
     rack-session (2.0.0)
       rack (>= 3.0.0)
     rack-test (2.1.0)
@@ -174,6 +176,10 @@ GEM
     rake (13.2.1)
     rdoc (6.7.0)
       psych (>= 4.0.0)
+    redis (5.3.0)
+      redis-client (>= 0.22.0)
+    redis-client (0.22.2)
+      connection_pool
     regexp_parser (2.9.2)
     reline (0.5.10)
       io-console (~> 0.5)
@@ -229,7 +235,9 @@ DEPENDENCIES
   debug
   pg (~> 1.1)
   puma (>= 5.0)
+  rack-cors
   rails (~> 7.2.1, >= 7.2.1.1)
+  redis (>= 4.0.1)
   rubocop-rails-omakase
   tzinfo-data
 
