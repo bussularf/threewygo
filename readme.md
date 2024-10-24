@@ -47,8 +47,6 @@ docker-compose run web bin/rails db:migrate
 
 Executar testes:
 ```
-docker-compose run web bin/rails db:environment:set RAILS_ENV=test
-
 docker-compose run web bundle exec rspec
 ```
 
