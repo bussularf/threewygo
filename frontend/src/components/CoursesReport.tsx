@@ -13,8 +13,12 @@ import {
   Alert, 
   AlertIcon, 
   Input, 
-  Button 
+  Button,
+  Stack
 } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
+import { IconButton } from '@chakra-ui/react';
+import { ChevronLeftIcon } from '@chakra-ui/icons';
 
 interface Course {
   id: number;
@@ -42,6 +46,12 @@ const CoursesReport: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate(-1);
   };
 
   const downloadCSV = async () => {
@@ -72,7 +82,6 @@ const CoursesReport: React.FC = () => {
   return (
     <Box p={4}>
       <Heading as="h2" size="xl" mb={4}>Relatório de Cursos</Heading>
-
       <Box mb={4} display={{ base: "block", md: "flex" }} gap={4}>
         <Input
           type="date"
@@ -87,9 +96,16 @@ const CoursesReport: React.FC = () => {
         <Button colorScheme="blue" onClick={downloadCSV} mt={{ base: 2, md: 0 }} ml={{ md: 2 }}>
           Baixar CSV
         </Button>
+        <IconButton 
+            aria-label="Voltar"
+            icon={<ChevronLeftIcon />}
+            onClick={handleBack}
+            variant="outline"
+            size="sm"
+            colorScheme="teal"
+          />
       </Box>
 
-      {/* Tabela de Cursos */}
       <Table variant="simple" size="sm">
         <Thead>
           <Tr>

@@ -15,6 +15,9 @@ import {
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useParams } from 'react-router-dom';
+import { IconButton } from '@chakra-ui/react';
+import { ChevronLeftIcon } from '@chakra-ui/icons';
+import { useNavigate } from 'react-router-dom';
 
 interface Video {
   id: number;
@@ -32,6 +35,7 @@ const CourseUpdateForm: React.FC = () => {
   const [existingVideos, setExistingVideos] = useState<Video[]>([]);
   const [removeVideoIds, setRemoveVideoIds] = useState<number[]>([]);
   const toast = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -59,6 +63,10 @@ const CourseUpdateForm: React.FC = () => {
 
     fetchCourse();
   }, [numericCourseId, toast]);
+
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -198,6 +206,19 @@ const CourseUpdateForm: React.FC = () => {
           <Button colorScheme="teal" size="lg" type="submit" w="full">
             Atualizar Curso
           </Button>
+        </Stack>
+      </Box>
+      <Box mt={4}>
+        <Stack direction="row" spacing={4} align="center">
+          
+          <IconButton 
+            aria-label="Voltar"
+            icon={<ChevronLeftIcon />}
+            onClick={handleBack}
+            variant="outline"
+            size="sm"
+            colorScheme="teal"
+          />
         </Stack>
       </Box>
     </Container>

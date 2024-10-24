@@ -7,18 +7,20 @@ import CourseForm from './components/CourseForm';
 import ShowCourse from './components/ShowCourse';
 import CourseUpdateForm from './components/CourseUpdateForm';
 import CoursesReport from './components/CoursesReport';
+import UploadNotification from './components/UploadNotification';
 
 const App: React.FC = () => {
   return (
     <Box bg="#C0EBA6" minHeight="100vh">
       <Navbar />
+      <UploadNotification />
       <Routes>
         <Route path="/" element={<CourseList />} />
         <Route path="/create-course" element={<CourseForm />} />
         <Route path="/courses/:id" element={<ShowCourse />} />
         <Route path="/courses/:id/edit" element={<CourseUpdateForm />} />
-        <Route path="/courses-report" element={<CoursesReport/>} />
-        </Routes>
+        <Route path="/courses-report" element={<CoursesReport />} />
+      </Routes>
     </Box>
   );
 };

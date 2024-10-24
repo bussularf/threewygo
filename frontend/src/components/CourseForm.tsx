@@ -6,13 +6,16 @@ import {
   FormControl,
   FormLabel,
   Heading,
+  Flex,
   Input,
   Textarea,
   useToast,
 } from '@chakra-ui/react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-
+import { useNavigate } from 'react-router-dom';
+import { IconButton } from '@chakra-ui/react';
+import { ChevronLeftIcon } from '@chakra-ui/icons';
 interface CourseResponse {
   title: string;
 }
@@ -24,6 +27,11 @@ const CourseForm: React.FC = () => {
   const [videosFile, setVideosFile] = useState<FileList | null>(null);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const toast = useToast();
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -66,7 +74,7 @@ const CourseForm: React.FC = () => {
       setPhotoFile(null);
       toast({
         title: 'Curso criado.',
-        description: `O curso "${response.data.title}" foi criado com sucesso!`,
+        description: `O curso foi criado com sucesso!`,
         status: 'success',
         duration: 5000,
         isClosable: true,
@@ -97,7 +105,19 @@ const CourseForm: React.FC = () => {
 
   return (
     <Box as="form" onSubmit={handleSubmit} p={4} borderWidth={1} borderRadius="md" boxShadow="md">
-      <Heading as="h2" size="lg" mb={4}>Criar Novo Curso</Heading>
+      <Flex align="center" justify="space-between" mb={4}>
+      <Heading as="h2" size="lg">
+        Criar Novo Curso
+      </Heading>
+      <IconButton 
+        aria-label="Voltar"
+        icon={<ChevronLeftIcon />}
+        onClick={handleBack}
+        variant="outline"
+        size="sm"
+        colorScheme="teal"
+      />
+    </Flex>
       <FormControl mb={4} isRequired>
         <FormLabel>Título:</FormLabel>
         <Input

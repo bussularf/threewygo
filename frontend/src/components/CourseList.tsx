@@ -43,7 +43,7 @@ const CourseList: React.FC = () => {
   if (error) return <Alert status="error"><AlertIcon />{error}</Alert>;
 
   return (
-    <Box>
+    <Box m={2}>
       <Heading as="h2" size="lg" mb={4}>Lista de Cursos</Heading>
       {courses.length === 0 ? (
         <Text>Nenhum curso disponível.</Text>

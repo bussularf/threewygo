@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Box, Heading, Text, Spinner, Alert, AlertIcon, VStack, Button, Stack } from '@chakra-ui/react';
+import { Box, Heading, Text, Spinner, Alert, AlertIcon, VStack, Button, Stack, Flex } from '@chakra-ui/react';
 import { IconButton } from '@chakra-ui/react';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 
@@ -68,10 +68,22 @@ const ShowCourse: React.FC = () => {
   if (error) return <Alert status="error"><AlertIcon />{error}</Alert>;
 
   return (
-    <Box>
+    <Box m={2}>
       {course ? (
         <>
-          <Heading as="h2" size="xl" mb={4}>{course.title}</Heading>
+          <Flex align="center" justify="space-between" mb={4}>
+            <Heading as="h2" size="lg">
+              {course.title}
+            </Heading>
+            <IconButton 
+              aria-label="Voltar"
+              icon={<ChevronLeftIcon />}
+              onClick={handleBack}
+              variant="outline"
+              size="sm"
+              colorScheme="teal"
+            />
+          </Flex>
           <Text fontSize="lg" mb={4}>{course.description}</Text>
           <Text>Data de Término: {course.end_date}</Text>
           <Text>Situação: {course.state}</Text>
@@ -85,14 +97,6 @@ const ShowCourse: React.FC = () => {
               <Button colorScheme="red" onClick={deleteCourse}>
                 Deletar Curso
               </Button>
-              <IconButton 
-                aria-label="Voltar"
-                icon={<ChevronLeftIcon />}
-                onClick={handleBack}
-                variant="outline"
-                size="sm"
-                colorScheme="teal"
-              />
             </Stack>
           </Box>
 
