@@ -1,7 +1,11 @@
 class Api::V1::CoursesController < ApplicationController
+  require "csv"
   def index
-    @courses = Course.all
-    render json: @courses
+    @courses = Course.where(state: :available)
+    courses_with_photos = @courses.map do |course|
+      course.as_json.merge(photo_url: course.photo.attached? ? url_for(course.photo) : nil)
+    end
+    render json: courses_with_photos
   end
 
   def new
@@ -47,7 +51,8 @@ class Api::V1::CoursesController < ApplicationController
 
     render json: {
       course: @course,
-      videos: videos
+      videos: videos,
+      total_video_size: @course.total_video_size
     }
   end
 
@@ -88,10 +93,37 @@ class Api::V1::CoursesController < ApplicationController
     @course.destroy
   end
 
+  def report
+    end_date = params[:end_date].presence
+
+    if end_date
+      parsed_end_date = end_date.to_date
+      courses = Course.where("end_date >= ?", parsed_end_date) if parsed_end_date
+    else
+      courses = Course.all
+    end
+
+    render json: {
+      courses: courses
+    }
+  end
+
+  def report_csv
+    courses = Course.all
+
+    csv_data = CSV.generate(headers: true) do |csv|
+      csv << [ "ID", "Título", "Descrição", "Data de Término" ]
+      courses.each do |course|
+        csv << [ course.id, course.title, course.description, course.end_date ]
+      end
+    end
+
+    send_data csv_data, filename: "cursos_relatorio.csv", type: "text/csv", disposition: "attachment"
+  end
 
   private
 
   def course_params
-    params.require(:course).permit(:title, :description, :state, :end_date, :videos, :remove_video_ids)
+    params.require(:course).permit(:title, :description, :state, :end_date, :photo, :videos, :total_video_size, :remove_video_ids)
   end
 end

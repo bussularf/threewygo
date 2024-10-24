@@ -1,7 +1,12 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
-      resources :courses
+      resources :courses do
+        collection do
+          get :report
+          get :report_csv
+        end
+      end
     end
   end
 end
