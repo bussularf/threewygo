@@ -36,15 +36,21 @@ Certifique-se de que você tem o Docker e o Docker Compose instalados.
    cd threewygo
 
 Construa e inicie os containers do Docker:
+```
 docker-compose up --build
+```
 
 Execute as migrações do banco de dados:
+```
 docker-compose run web bin/rails db:migrate
+```
 
 Executar testes:
+```
 docker-compose run web bin/rails db:environment:set RAILS_ENV=test
 
 docker-compose run web bundle exec rspec
+```
 
 Acesse a aplicação no navegador em http://localhost:3001.
 Acesse a Api em http://localhost:3000.
