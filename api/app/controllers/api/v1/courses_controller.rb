@@ -110,13 +110,20 @@ class Api::V1::CoursesController < ApplicationController
 
     if end_date
       parsed_end_date = end_date.to_date
-      courses = Course.where("end_date >= ?", parsed_end_date) if parsed_end_date
+      courses = Course.where("end_date >= ?", parsed_end_date)
     else
       courses = Course.all
     end
 
+    courses_with_video_sizes = courses.map do |course|
+      {
+        course: course,
+        total_video_size: course.total_video_size
+      }
+    end
+
     render json: {
-      courses: courses
+      courses: courses_with_video_sizes
     }
   end
 
