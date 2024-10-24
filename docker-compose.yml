@@ -22,7 +22,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      DATABASE_URL: postgres://fernanda:121296@db:5432/api_development
+      DATABASE_URL: ${DATABASE_URL}
       REDIS_URL: redis://redis:6379/0
 
   frontend:
