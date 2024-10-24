@@ -14,10 +14,10 @@ import {
   AlertIcon, 
   Input, 
   Button,
+  IconButton,
 } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
-import { IconButton } from '@chakra-ui/react';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
+import { useNavigate } from 'react-router-dom';
 
 const CoursesReport: React.FC = () => {
   const [courses, setCourses] = useState<any[]>([]);
@@ -97,7 +97,7 @@ const CoursesReport: React.FC = () => {
         />
       </Box>
 
-      <Table variant="simple" size="sm">
+      <Table variant="simple" size={{ base: "sm", md: "md" }}>
         <Thead>
           <Tr>
             <Th>ID</Th>

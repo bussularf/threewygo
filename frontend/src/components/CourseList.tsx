@@ -55,7 +55,16 @@ const CourseList: React.FC = () => {
                 <Text p={2} fontWeight="bold" color="teal.500" textAlign="center">
                   {course.title}
                 </Text>
-                <Text p={2}>{course.description}</Text>
+                <Text p={2}>
+                  {course.description.length > 10 ? (
+                    <>
+                      {course.description.slice(0, 100)}...{' '}
+                      <Link to={`/courses/${course.id}`}>Ver mais</Link>
+                    </>
+                  ) : (
+                    course.description
+                  )}
+                </Text>
                 <Image 
                   src={course.photo_url}
                   alt={course.title}
