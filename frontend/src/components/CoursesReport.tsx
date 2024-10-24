@@ -14,22 +14,13 @@ import {
   AlertIcon, 
   Input, 
   Button,
-  Stack
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { IconButton } from '@chakra-ui/react';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 
-interface Course {
-  id: number;
-  title: string;
-  description: string;
-  startDate: string;
-  end_date: string;
-}
-
 const CoursesReport: React.FC = () => {
-  const [courses, setCourses] = useState<Course[]>([]);
+  const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [end_date, setEndDate] = useState<string>('');
@@ -103,7 +94,7 @@ const CoursesReport: React.FC = () => {
             variant="outline"
             size="sm"
             colorScheme="teal"
-          />
+        />
       </Box>
 
       <Table variant="simple" size="sm">
@@ -113,21 +104,23 @@ const CoursesReport: React.FC = () => {
             <Th>Título</Th>
             <Th>Descrição</Th>
             <Th>Data de Término</Th>
+            <Th>GB ocupado</Th>
           </Tr>
         </Thead>
         <Tbody>
           {courses && courses.length > 0 ? (
             courses.map((course) => (
-              <Tr key={course.id}>
-                <Td>{course.id}</Td>
-                <Td>{course.title}</Td>
-                <Td>{course.description}</Td>
-                <Td>{course.end_date}</Td>
+              <Tr key={course.course.id}>
+                <Td>{course.course.id}</Td>
+                <Td>{course.course.title}</Td>
+                <Td>{course.course.description}</Td>
+                <Td>{course.course.end_date}</Td>
+                <Td>{course.total_video_size} GB</Td>
               </Tr>
             ))
           ) : (
             <Tr>
-              <Td colSpan={4}>Nenhum curso encontrado.</Td>
+              <Td colSpan={5}>Nenhum curso encontrado.</Td>
             </Tr>
           )}
         </Tbody>
