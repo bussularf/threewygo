@@ -6,6 +6,7 @@ import CourseList from './components/CourseList';
 import CourseForm from './components/CourseForm';
 import ShowCourse from './components/ShowCourse';
 import CourseUpdateForm from './components/CourseUpdateForm';
+import CoursesReport from './components/CoursesReport';
 
 const App: React.FC = () => {
   return (
@@ -16,6 +17,7 @@ const App: React.FC = () => {
         <Route path="/create-course" element={<CourseForm />} />
         <Route path="/courses/:id" element={<ShowCourse />} />
         <Route path="/courses/:id/edit" element={<CourseUpdateForm />} />
+        <Route path="/courses-report" element={<CoursesReport/>} />
         </Routes>
     </Box>
   );

@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Box, Heading, Text, Spinner, Alert, AlertIcon, VStack, Button } from '@chakra-ui/react';
+import { Box, Heading, Text, Spinner, Alert, AlertIcon, VStack, Button, Stack } from '@chakra-ui/react';
+import { IconButton } from '@chakra-ui/react';
+import { ChevronLeftIcon } from '@chakra-ui/icons';
 
 interface Video {
   id: number;
@@ -13,7 +15,8 @@ interface Course {
   id: number;
   title: string;
   description: string;
-  endDate: string;
+  end_date: string;
+  state: string;
 }
 
 const ShowCourse: React.FC = () => {
@@ -21,6 +24,7 @@ const ShowCourse: React.FC = () => {
   const navigate = useNavigate();
   const [course, setCourse] = useState<Course | null>(null);
   const [videos, setVideos] = useState<Video[]>([]);
+  const [totalVideoSize, setTotalVideoSize] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -28,16 +32,13 @@ const ShowCourse: React.FC = () => {
     const fetchCourse = async () => {
       try {
         const response = await axios.get(`http://localhost:3000/api/v1/courses/${id}`);
-        const apiCourse = response.data.course;
-        const course = {
-          ...apiCourse,
-          title: apiCourse.title,
-          endDate: apiCourse.end_date,
-        };
-
+        const course = response.data.course;
         const fetchedVideos = response.data.videos || [];
+        const totalVideoSize = response.data.total_video_size;
+
         setCourse(course);
         setVideos(fetchedVideos);
+        setTotalVideoSize(totalVideoSize);
       } catch (error) {
         setError('Erro ao buscar detalhes do curso');
       } finally {
@@ -47,6 +48,10 @@ const ShowCourse: React.FC = () => {
 
     fetchCourse();
   }, [id]);
+
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   const deleteCourse = async () => {
     const confirmDelete = window.confirm('Tem certeza que deseja deletar este curso?');
@@ -68,20 +73,27 @@ const ShowCourse: React.FC = () => {
         <>
           <Heading as="h2" size="xl" mb={4}>{course.title}</Heading>
           <Text fontSize="lg" mb={4}>{course.description}</Text>
-          <Text>Data de Término: {new Date(course.endDate).toLocaleDateString()}</Text>
+          <Text>Data de Término: {course.end_date}</Text>
+          <Text>Situação: {course.state}</Text>
+          <Text>Tamanho Total dos Vídeos: {totalVideoSize} GB</Text>
 
-          {/* Update Button */}
           <Box mt={4}>
-            <Link to={`/courses/${id}/edit`}>
-              <Button colorScheme="teal">Editar Curso</Button>
-            </Link>
-          </Box>
-
-          {/* Delete Button */}
-          <Box mt={4}>
-            <Button colorScheme="red" onClick={deleteCourse}>
-              Deletar Curso
-            </Button>
+            <Stack direction="row" spacing={4} align="center">
+              <Link to={`/courses/${id}/edit`}>
+                <Button colorScheme="teal">Editar Curso</Button>
+              </Link>
+              <Button colorScheme="red" onClick={deleteCourse}>
+                Deletar Curso
+              </Button>
+              <IconButton 
+                aria-label="Voltar"
+                icon={<ChevronLeftIcon />}
+                onClick={handleBack}
+                variant="outline"
+                size="sm"
+                colorScheme="teal"
+              />
+            </Stack>
           </Box>
 
           <VStack spacing={4} mt={6} align="stretch">
@@ -92,7 +104,14 @@ const ShowCourse: React.FC = () => {
                   <Text>Vídeo ID: {video.id}</Text>
                   {video.urls.map((url, index) => (
                     <Box key={index} mt={2} width="100%">
-                      <video style={{ maxWidth: '600px', width: '100%', height: 'auto' }} controls>
+                      <video
+                        style={{
+                          maxWidth: '100%',
+                          width: '600px',
+                          height: '340px',
+                        }}
+                        controls
+                      >
                         <source src={url} type="video/mp4" />
                         Seu navegador não suporta o elemento de vídeo.
                       </video>

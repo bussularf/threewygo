@@ -1,12 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom'; // Importa o Link para navegação
+import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { Box, Heading, Text, List, ListItem, Spinner, Alert, AlertIcon } from '@chakra-ui/react';
+import {
+  Box,
+  Heading,
+  Text,
+  Grid,
+  Image,
+  Spinner,
+  Alert,
+  AlertIcon,
+} from '@chakra-ui/react';
 
 interface Course {
   id: number;
   title: string;
   description: string;
+  photo_url: string;
 }
 
 const CourseList: React.FC = () => {
@@ -38,16 +48,25 @@ const CourseList: React.FC = () => {
       {courses.length === 0 ? (
         <Text>Nenhum curso disponível.</Text>
       ) : (
-        <List spacing={3}>
+        <Grid templateColumns="repeat(auto-fill, minmax(250px, 1fr))" gap={6}>
           {courses.map(course => (
-            <ListItem key={course.id}>
-              <Link to={`/courses/${course.id}`}>
-                <Text fontWeight="bold" color="teal.500">{course.title}</Text>
-              </Link>
-              <Text>{course.description}</Text>
-            </ListItem>
+            <Link to={`/courses/${course.id}`} key={course.id}>
+              <Box borderWidth={1} borderRadius="md" overflow="hidden">
+                <Text p={2} fontWeight="bold" color="teal.500" textAlign="center">
+                  {course.title}
+                </Text>
+                <Text p={2}>{course.description}</Text>
+                <Image 
+                  src={course.photo_url}
+                  alt={course.title}
+                  objectFit="cover" 
+                  width="100%"
+                  height="150px"
+                />
+              </Box>
+            </Link>
           ))}
-        </List>
+        </Grid>
       )}
     </Box>
   );

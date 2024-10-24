@@ -16,7 +16,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useParams } from 'react-router-dom';
 
-interface videos {
+interface Video {
   id: number;
   urls: string[];
 }
@@ -27,9 +27,9 @@ const CourseUpdateForm: React.FC = () => {
 
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
-  const [end_date, setEndDate] = useState<Date | null>(null);
+  const [end_date, setEndDate] = useState<Date>(new Date());
   const [videosFile, setVideosFile] = useState<FileList | null>(null);
-  const [existingVideos, setExistingVideos] = useState<videos[]>([]);
+  const [existingVideos, setExistingVideos] = useState<Video[]>([]);
   const [removeVideoIds, setRemoveVideoIds] = useState<number[]>([]);
   const toast = useToast();
 
@@ -41,7 +41,9 @@ const CourseUpdateForm: React.FC = () => {
 
         setTitle(courseData.title);
         setDescription(courseData.description);
-        setEndDate(new Date(courseData.end_date));
+        
+        setEndDate(new Date(courseData.end_date + 'T00:00:00'));
+        
         setExistingVideos(response.data.videos || []);
       } catch (error) {
         console.error('Erro ao carregar dados do curso:', error);
@@ -64,7 +66,7 @@ const CourseUpdateForm: React.FC = () => {
     const formData = new FormData();
     formData.append('course[title]', title);
     formData.append('course[description]', description);
-    if (end_date) formData.append('course[end_date]', end_date.toISOString());
+    formData.append('course[end_date]', end_date.toISOString());
 
     if (videosFile) {
       for (let i = 0; i < videosFile.length; i++) {
@@ -152,7 +154,9 @@ const CourseUpdateForm: React.FC = () => {
             <FormLabel>Data de Término:</FormLabel>
             <DatePicker
               selected={end_date}
-              onChange={(date: Date | null) => setEndDate(date)}
+              onChange={(date: Date | null) => {
+                if (date) setEndDate(date);
+              }}
               dateFormat="dd/MM/yyyy"
               placeholderText="Selecione a data de término"
               className="chakra-input"

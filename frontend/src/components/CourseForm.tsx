@@ -22,11 +22,12 @@ const CourseForm: React.FC = () => {
   const [description, setDescription] = useState<string>('');
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [videosFile, setVideosFile] = useState<FileList | null>(null);
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
   const toast = useToast();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!title || !description || !endDate || !videosFile) {
+    if (!title || !description || !endDate || !videosFile || !photoFile) {
       toast({
         title: 'Erro de validação.',
         description: 'Por favor, preencha todos os campos.',
@@ -48,6 +49,10 @@ const CourseForm: React.FC = () => {
       }
     }
 
+    if (photoFile) {
+      formData.append('course[photo]', photoFile);
+    }
+
     try {
       const response = await axios.post<CourseResponse>('http://localhost:3000/api/v1/courses', formData, {
         headers: {
@@ -58,6 +63,7 @@ const CourseForm: React.FC = () => {
       setDescription('');
       setEndDate(null);
       setVideosFile(null);
+      setPhotoFile(null);
       toast({
         title: 'Curso criado.',
         description: `O curso "${response.data.title}" foi criado com sucesso!`,
@@ -126,6 +132,14 @@ const CourseForm: React.FC = () => {
           accept="video/*"
           multiple
           onChange={(e) => setVideosFile(e.target.files || null)}
+        />
+      </FormControl>
+      <FormControl mb={4} isRequired>
+        <FormLabel>Capa do Vídeo:</FormLabel>
+        <Input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setPhotoFile(e.target.files?.[0] || null)}
         />
       </FormControl>
       <Button colorScheme="teal" type="submit">Criar Curso</Button>
