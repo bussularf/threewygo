@@ -27,9 +27,15 @@ class Api::V1::CoursesController < ApplicationController
           if params[:course][:videos].present?
             uploaded_videos = params[:course][:videos].is_a?(Array) ? params[:course][:videos] : [ params[:course][:videos] ]
 
-            uploaded_videos.each do |video|
-              @course.videos.create!(videos: video)
+            video_blobs = uploaded_videos.map do |video|
+              ActiveStorage::Blob.create_and_upload!(
+                io: video.tempfile,
+                filename: video.original_filename,
+                content_type: video.content_type
+              ).signed_id
             end
+
+            VideoUploadJob.perform_later(@course.id, video_blobs)
           end
           render json: { message: "Curso criado com sucesso", course: @course }, status: :created
         else
@@ -65,9 +71,15 @@ class Api::V1::CoursesController < ApplicationController
       if params[:course][:videos].present?
         uploaded_videos = params[:course][:videos].is_a?(Array) ? params[:course][:videos] : [ params[:course][:videos] ]
 
-        uploaded_videos.each do |video|
-          @course.videos.create!(videos: video)
+        video_blobs = uploaded_videos.map do |video|
+          ActiveStorage::Blob.create_and_upload!(
+            io: video.tempfile,
+            filename: video.original_filename,
+            content_type: video.content_type
+          ).signed_id
         end
+
+        VideoUploadJob.perform_later(@course.id, video_blobs)
       end
 
       if params[:course][:remove_video_ids].present?
@@ -124,6 +136,6 @@ class Api::V1::CoursesController < ApplicationController
   private
 
   def course_params
-    params.require(:course).permit(:title, :description, :state, :end_date, :photo, :videos, :total_video_size, :remove_video_ids)
+    params.require(:course).permit(:title, :description, :state, :end_date, :photo, :total_video_size, :remove_video_ids)
   end
 end
