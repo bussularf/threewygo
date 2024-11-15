@@ -1,4 +1,4 @@
-# Relatório de Cursos
+# Manage Video
 
 Este projeto é uma aplicação web que permite a visualização e geração de relatórios de cursos. A aplicação é construída com **React** no frontend e **Ruby on Rails** no backend, utilizando **Chakra UI** para o design e uma API REST para a comunicação entre cliente e servidor.
 
